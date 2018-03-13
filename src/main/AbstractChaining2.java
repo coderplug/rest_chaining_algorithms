@@ -1,0 +1,100 @@
+package main;
+
+import com.sun.org.apache.xml.internal.serialize.LineSeparator;
+import com.sun.xml.internal.txw2.annotation.XmlNamespace;
+
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
+@XmlRootElement(name = "chainingQuery", namespace="")
+public abstract class AbstractChaining2 {
+
+    @XmlTransient
+    protected static String NL = System.getProperty("line.separator");
+
+    @XmlTransient
+    private List<String> facts;
+
+    private Data data;
+    private Trace trace;
+    private Result result;
+
+    public AbstractChaining2(){
+
+    }
+
+    public AbstractChaining2(Data data) {
+        this.data = data;
+        this.trace = new Trace(new LinkedList<>());
+        facts = new LinkedList<>(data.getFacts());
+    }
+
+    public Data getData() {
+        return data;
+    }
+
+    public void setData(Data data) {
+        this.data = data;
+    }
+
+    public Trace getTrace() {
+        return trace;
+    }
+
+    public void setTrace(Trace trace) {
+        this.trace = trace;
+    }
+
+    public Result getResult() {
+        return result;
+    }
+
+    public void setResult(Result result) {
+        this.result = result;
+    }
+
+    @XmlTransient
+    public List<String> getFacts() {
+        return facts;
+    }
+
+    public void setFacts(List<String> facts) {
+        this.facts = facts;
+    }
+
+    protected abstract void execute();
+
+    //Used for listing facts in result string
+    public String listFacts() {
+        StringBuilder result = new StringBuilder();
+        for(int i=0; i<facts.size(); i++)
+        {
+            if (i != facts.size() - 1)
+            {
+                result.append(facts.get(i) + ", ");
+            }
+            else
+            {
+                result.append(facts.get(i));
+            }
+        }
+        return result.toString();
+    }
+
+    @Override
+    public String toString(){
+        StringBuilder stringBuilder = new StringBuilder();
+
+        stringBuilder.append("PART 1. Data").append(NL).append(NL);
+        stringBuilder.append(data).append(NL).append(NL);
+        stringBuilder.append("PART 2. Trace").append(NL).append(NL);
+        stringBuilder.append(trace).append(NL).append(NL);
+        stringBuilder.append("PART 3. Results").append(NL).append(NL);
+        stringBuilder.append(result);
+
+        return stringBuilder.toString();
+    }
+}
