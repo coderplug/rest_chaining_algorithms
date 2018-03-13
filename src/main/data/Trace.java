@@ -1,4 +1,4 @@
-package main;
+package main.data;
 
 import javax.xml.bind.annotation.*;
 import java.util.LinkedList;
@@ -44,7 +44,6 @@ public class Trace {
         String NL = System.getProperty("line.separator");
         int count = 0;
         StringBuilder stringBuilder = new StringBuilder();
-        //stringBuilder.append("PART 2. Trace").append(NL).append(NL);
         for(String line: traceList)
         {
             if (count != 0)

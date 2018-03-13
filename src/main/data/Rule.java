@@ -1,4 +1,4 @@
-package main;
+package main.data;
 
 import javax.xml.bind.annotation.*;
 import java.util.ArrayList;
@@ -20,6 +20,8 @@ public class Rule {
     //Empty is needed to generate XML
     public Rule(){
         this.antecedents = new LinkedList<>();
+        flag1 = false;
+        flag2 = false;
     }
 
     public Rule(String consequent, List<String> antecedents, int number) {

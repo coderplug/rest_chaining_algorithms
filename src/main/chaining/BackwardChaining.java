@@ -1,56 +1,70 @@
-package main;
+package main.chaining;
 
-import java.util.ArrayList;
+import main.data.Data;
+import main.data.Result;
+import main.data.Rule;
+import main.data.Trace;
+
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.LinkedList;
 import java.util.List;
 
+@XmlRootElement(name = "chainingQuery")
 public class BackwardChaining extends AbstractChaining {
 
     private List<String> goals;
     private List<Rule> resultPath;
     private int recursionLevel;
     private int lineCount;
-    //private List<String> facts;
 
-    public BackwardChaining(String goal, List<Rule> rules, List<String> facts, StringBuilder sb) {
-        super(goal, rules, facts, sb);
+    public BackwardChaining() {
+        super();
         resultPath = new LinkedList<>();
         goals = new LinkedList<>();
         lineCount = 0;
         recursionLevel = 0;
-        //facts = new LinkedList<>();
     }
 
-    protected ChainingProcessResult doExecute(){
-        boolean success = backwardChaining(getGoal());
-        getSb().append(NL);
-        return new ChainingProcessResult(getSb(), success, resultPath, getGoal());
+    public BackwardChaining(Data data) {
+        super(data);
+        resultPath = new LinkedList<>();
+        goals = new LinkedList<>();
+        lineCount = 0;
+        recursionLevel = 0;
+    }
+
+    public void execute(){
+        boolean success = backwardChaining(getData().getGoal());
+        setResult(new Result(success, resultPath, getData()));
     }
     //Recursive function
     private boolean backwardChaining(String currentGoal) {
+        Trace trace = getTrace();
+        List<Rule> rules = getData().getRules();
+        List<String> facts = getFacts();
         recursionLevel++;
         //Checks whether facts have current goal
-        if (getFacts().contains(currentGoal)) {
-            getSb().append(getRecursionLevel()).append("Goal ").append(currentGoal).append(".");
-            getSb().append(" Fact.").append(NL);
+        if (facts.contains(currentGoal)) {
+            trace.addToTrace(getRecursionLevel() + "Goal " + currentGoal + "." +
+                    " Fact.");
             recursionLevel--;
             return true;
         }
         //Adding current goal to goals list
         goals.add(currentGoal);
         //Skimming through rules
-        for (Rule rule : getRules()) {
+        for (Rule rule : rules) {
             //Checks if rule is not used and currentGoal is rules result
             if (!rule.getFlag1() && rule.getConsequent().equals(currentGoal)) {
                 List<String> antecedents = rule.getAntecedents();
                 boolean antecendentsExists = true;
                 //Information about current goal, used rule and new goals
-                getSb().append(getRecursionLevel()).append("Goal ").append(currentGoal).append(".")
-                        .append(" Take ").append(rule.toString()).append(".")
-                        .append(" New goals ").append(listAntecendants(rule)).append(".").append(NL);
+                trace.addToTrace(getRecursionLevel() + "Goal " + currentGoal + "."
+                        + " Take " + rule.toString() + "."
+                        + " New goals " + rule.listAntecedents() + ".");
                 //Iterating through antecendants to check whether they exist
                 for (String antecedent : antecedents) {
-                    //Checks whether goal finding fails  -----NESUPRANTU ŠITO
+                    //Checks whether goal finding fails
                     if (!goals.contains(antecedent)){
                         if (!backwardChaining(antecedent)) {
                             antecendentsExists = false;
@@ -58,7 +72,7 @@ public class BackwardChaining extends AbstractChaining {
                         }
                     } else {
                         recursionLevel++;
-                        getSb().append(getRecursionLevel()).append("Goal ").append(antecedent).append(". Loop.").append(NL);
+                        trace.addToTrace(getRecursionLevel() + "Goal " + antecedent + ". Loop.");
                         recursionLevel--;
                         antecendentsExists = false;
                         break;
@@ -66,11 +80,11 @@ public class BackwardChaining extends AbstractChaining {
                 }
                 if (antecendentsExists) {
                     rule.setFlag1(true);
-                    getFacts().add(rule.getConsequent());
+                    facts.add(rule.getConsequent());
                     resultPath.add(rule);
-                    getSb().append(getRecursionLevel()).append("Goal ").append(currentGoal)
-                            .append(". New fact: ").append(rule.getConsequent())
-                            .append(". Facts: ").append(listFacts()).append(".").append(NL);
+                    trace.addToTrace(getRecursionLevel() + "Goal " + currentGoal
+                            + ". New fact: " + rule.getConsequent()
+                            + ". Facts: " + listFacts() + ".");
                     recursionLevel--;
                     goals.remove(currentGoal);
                     return true;
@@ -78,33 +92,17 @@ public class BackwardChaining extends AbstractChaining {
             }
         }
         goals.remove(currentGoal);
-        for(Rule rule: getRules()){
+        for(Rule rule: rules){
             if(rule.getFlag1()){
                 rule.setFlag1(false);
                 resultPath.remove(rule);
-                getFacts().remove(rule.getConsequent());
+                facts.remove(rule.getConsequent());
             }
         }
-        getSb().append(getRecursionLevel()).append("Goal ").append(currentGoal).append(".");
-        getSb().append(" Fact cannot be derived").append(".").append(NL);
+        trace.addToTrace(getRecursionLevel() + "Goal " + currentGoal + "."
+                + " Fact cannot be derived" + ".");
         recursionLevel--;
         return false;
-    }
-
-    public String getResultPath() {
-        if (resultPath.size() == 0) {
-            return null;
-        }
-        StringBuilder sb = new StringBuilder();
-        getSb().append("  Path: {");
-        for (Rule rule : resultPath) {
-            sb.append("R").append(Integer.toString(rule.getNumber())).append(", ");
-        }
-        if (sb.lastIndexOf(", ") != -1) {
-            sb.delete(getSb().lastIndexOf(", "), getSb().length());
-        }
-        sb.append("}");
-        return sb.toString();
     }
 
     public String getRecursionLevel() {

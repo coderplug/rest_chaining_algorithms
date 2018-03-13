@@ -1,4 +1,4 @@
-package main;
+package main.data;
 
 import javax.xml.bind.annotation.*;
 import java.util.LinkedList;

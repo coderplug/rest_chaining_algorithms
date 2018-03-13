@@ -1,6 +1,7 @@
-package main;
+package main.data;
 
 import javax.xml.bind.annotation.*;
+import java.util.LinkedList;
 import java.util.List;
 
 @XmlRootElement
@@ -20,6 +21,8 @@ public class Data {
     private List<String> facts;
 
     public Data(){
+        rules = new LinkedList<>();
+        facts = new LinkedList<>();
 
     }
 

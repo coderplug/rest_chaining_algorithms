@@ -1,31 +1,34 @@
-package main;
+package main.chaining;
 
-import main.AbstractChaining;
+import main.data.Data;
+import main.data.Result;
+import main.data.Rule;
+import main.data.Trace;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.LinkedList;
 import java.util.List;
 
 @XmlRootElement(name = "chainingQuery")
-public class ForwardChaining2 extends AbstractChaining2 {
+public class ForwardChaining extends AbstractChaining {
 
     String step;
     private int lineCount;
     private List<String> facts;
 
-    public ForwardChaining2(){
+    public ForwardChaining(){
         super();
+        lineCount = 0;
     }
 
-    public ForwardChaining2(Data data) {
+    public ForwardChaining(Data data) {
         super(data);
         lineCount = 0;
         facts = new LinkedList<>(data.getFacts());
     }
 
-    protected void execute() {
+    public void execute() {
         List<Rule> ruleList = new LinkedList<>();
-        List<Rule> ruleSequence = new LinkedList<>();
         int iterationNumber = 0;
         boolean facts_changed;
         Trace trace = getTrace();
@@ -52,7 +55,7 @@ public class ForwardChaining2 extends AbstractChaining2 {
                             ruleList.add(rule);
                             facts.add(rule.getConsequent());
                             trace.addToTrace(stringBuilder.toString() + " apply. Raise flag1. Facts "
-                                             + listFacts() + ".");
+                                    + listFacts() + ".");
                             facts_changed = true;
                             if (rule.getConsequent().equals(goal)) {
                                 trace.addToTrace("    Goal achieved." + NL);

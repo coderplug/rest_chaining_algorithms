@@ -1,23 +1,27 @@
 package main;
 
+import main.chaining.AbstractChaining;
+import main.chaining.BackwardChaining;
+import main.chaining.ForwardChaining;
+import main.data.Data;
+import main.data.Trace;
+
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import java.util.ArrayList;
-import java.util.List;
 
 // The Java class will be hosted at the URI path "/helloworld"
 @Path("/rest")
 public class HelloWorld {
     String NL = System.getProperty("line.separator");
 
-    public static AbstractChaining2 createChaining(Data data)
+    public static AbstractChaining createChaining(Data data)
     {
         if (data != null && data.getChainingType() != null) {
             switch (data.getChainingType().toLowerCase()) {
                 case "backward":
-                    return new BackwardChaining2(data);
+                    return new BackwardChaining(data);
                 case "forward":
-                    return new ForwardChaining2(data);
+                    return new ForwardChaining(data);
                 default:
                     return null;
             }
@@ -32,10 +36,10 @@ public class HelloWorld {
     //@Consumes(MediaType.APPLICATION_JSON)
     @Produces({MediaType.APPLICATION_XML})
     //@Produces("text/plain")
-    public AbstractChaining2 getClichedMessage(@PathParam("username") String userName) {
+    public AbstractChaining getClichedMessage(@PathParam("username") String userName) {
         IOReader io = new IOReader();
         String chainingType = "backward";
-        AbstractChaining2 chainingAlgorithm = io.readFromFile(chainingType);
+        AbstractChaining chainingAlgorithm = io.readFromFile(chainingType);
         /*return new Data(chainingAlgorithm.getGoal(),
                         chainingAlgorithm.getRules(),
                         chainingAlgorithm.getFacts(),
@@ -79,7 +83,7 @@ public class HelloWorld {
 
         AbstractChaining chainingAlgorithm = new BackwardChaining("A", rules, facts, new StringBuilder());
         */
-        //ChainingProcessResult result = chainingAlgorithm.execute();
+        //Result result = chainingAlgorithm.execute();
         chainingAlgorithm.execute();
         // Return some cliched textual content
         //return "Hello World";
@@ -113,7 +117,7 @@ public class HelloWorld {
         }
         IOReader reader = new IOReader();
         data.setRules(reader.rulesFromFile());
-        AbstractChaining2 chainingAlgorithm = createChaining(data);
+        AbstractChaining chainingAlgorithm = createChaining(data);
         chainingAlgorithm.execute();
         return chainingAlgorithm.getTrace();
     }
@@ -125,18 +129,18 @@ public class HelloWorld {
     @Consumes({MediaType.APPLICATION_XML})
     //@Produces({MediaType.APPLICATION_XML})
     @Produces({MediaType.APPLICATION_XML})
-    public AbstractChaining2 getClichedMessage2(Data data) {
+    public AbstractChaining getClichedMessage2(Data data) {
         if (data == null || data.getChainingType() == null || data.getChainingType().isEmpty()){
-            return new BackwardChaining2();
+            return new BackwardChaining();
         }
         IOReader reader = new IOReader();
         data.setRules(reader.rulesFromFile());
-        AbstractChaining2 chainingAlgorithm = createChaining(data);
+        AbstractChaining chainingAlgorithm = createChaining(data);
         chainingAlgorithm.execute();
         return chainingAlgorithm;
         /*IOReader io = new IOReader();
         String chainingType = "backward";
-        AbstractChaining2 chainingAlgorithm = io.readFromFile(chainingType);
+        AbstractChaining chainingAlgorithm = io.readFromFile(chainingType);
         *//*return new Data(chainingAlgorithm.getGoal(),
                         chainingAlgorithm.getRules(),
                         chainingAlgorithm.getFacts(),
@@ -180,7 +184,7 @@ public class HelloWorld {
 
         AbstractChaining chainingAlgorithm = new BackwardChaining("A", rules, facts, new StringBuilder());
         *//*
-        //ChainingProcessResult result = chainingAlgorithm.execute();
+        //Result result = chainingAlgorithm.execute();
         chainingAlgorithm.execute();
         // Return some cliched textual content
         //return "Hello World";

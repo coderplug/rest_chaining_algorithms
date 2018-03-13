@@ -1,16 +1,17 @@
-package main;
+package main.chaining;
 
-import com.sun.org.apache.xml.internal.serialize.LineSeparator;
-import com.sun.xml.internal.txw2.annotation.XmlNamespace;
+
+import main.data.Data;
+import main.data.Result;
+import main.data.Trace;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 @XmlRootElement(name = "chainingQuery", namespace="")
-public abstract class AbstractChaining2 {
+public abstract class AbstractChaining {
 
     @XmlTransient
     protected static String NL = System.getProperty("line.separator");
@@ -22,11 +23,11 @@ public abstract class AbstractChaining2 {
     private Trace trace;
     private Result result;
 
-    public AbstractChaining2(){
-
+    public AbstractChaining(){
+        this.trace = new Trace(new LinkedList<>());
     }
 
-    public AbstractChaining2(Data data) {
+    public AbstractChaining(Data data) {
         this.data = data;
         this.trace = new Trace(new LinkedList<>());
         facts = new LinkedList<>(data.getFacts());
@@ -65,7 +66,7 @@ public abstract class AbstractChaining2 {
         this.facts = facts;
     }
 
-    protected abstract void execute();
+    public abstract void execute();
 
     //Used for listing facts in result string
     public String listFacts() {

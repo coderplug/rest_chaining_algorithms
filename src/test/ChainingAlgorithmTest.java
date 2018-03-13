@@ -1,6 +1,9 @@
 package test;
 
-import main.*;
+import main.chaining.AbstractChaining;
+import main.chaining.ForwardChaining;
+import main.data.Data;
+import main.data.Rule;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -45,8 +48,7 @@ public class ChainingAlgorithmTest {
 
         facts.add("E");
 
-        AbstractChaining chainingAlgorithm = new ForwardChaining("A", rules, facts, new StringBuilder());
-
-        ChainingProcessResult result = chainingAlgorithm.execute();
+        AbstractChaining chainingAlgorithm = new ForwardChaining(new Data("A", rules, facts, "forward"));
+        chainingAlgorithm.execute();
     }
 }

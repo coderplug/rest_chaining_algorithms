@@ -1,7 +1,12 @@
 package main;
 
+import main.chaining.AbstractChaining;
+import main.chaining.BackwardChaining;
+import main.chaining.ForwardChaining;
+import main.data.Data;
+import main.data.Rule;
+
 import java.io.*;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -52,7 +57,7 @@ public class IOReader {
         return rules;
     }
 
-    public AbstractChaining2 readFromFile(String chainingType)
+    public AbstractChaining readFromFile(String chainingType)
     {
         List<String> fileLines = new LinkedList<>();
         int rules_from = -1;
@@ -134,8 +139,8 @@ public class IOReader {
         }*/
         switch(chainingType.toLowerCase())
         {
-            case "backward": return new BackwardChaining2(new Data(goal, rules, facts, chainingType.toLowerCase()));
-            case "forward": return new ForwardChaining2(new Data(goal, rules, facts, chainingType.toLowerCase()));
+            case "backward": return new BackwardChaining(new Data(goal, rules, facts, chainingType.toLowerCase()));
+            case "forward": return new ForwardChaining(new Data(goal, rules, facts, chainingType.toLowerCase()));
             default: return null;
         }
     }
