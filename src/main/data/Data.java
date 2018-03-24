@@ -1,16 +1,29 @@
 package main.data;
 
+import main.data.dao.RuleDAO;
+import main.data.entity.Rule;
+
+import javax.annotation.PostConstruct;
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.xml.bind.annotation.*;
 import java.util.LinkedList;
 import java.util.List;
 
+
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
+@Named
+@RequestScoped
 public class Data {
 
     private String chainingType;
     private String goal;
 
+    @XmlTransient
+    @Inject
+    private RuleDAO ruleDAO;
     //@XmlElementWrapper(name = "rules")
     //@XmlElement(name = "rule")
     @XmlTransient
@@ -21,16 +34,19 @@ public class Data {
     private List<String> facts;
 
     public Data(){
-        rules = new LinkedList<>();
+        //rules = ruleDAO.getAll();
         facts = new LinkedList<>();
-
     }
 
-    public Data(String goal, List<Rule> rules, List<String> facts, String chainingType) {
+    public Data(String goal, List<String> facts, String chainingType) {
         this.goal = goal;
-        this.rules = rules;
         this.facts = facts;
         this.chainingType = chainingType;
+    }
+
+    @PostConstruct
+    private void postConstruct(){
+        rules = ruleDAO.getAll();
     }
 
     @XmlTransient
@@ -51,7 +67,6 @@ public class Data {
     }
 
     public String getGoal() {
-
         return goal;
     }
 
@@ -72,7 +87,7 @@ public class Data {
     {
         String NL = System.getProperty("line.separator");
         StringBuilder stringBuilder = new StringBuilder();
-
+        List<Rule> rules = ruleDAO.getAll();
         stringBuilder.append("  1) Rules").append(NL);
         for(Rule r: rules){
             stringBuilder.append("     ").append(r.toString()).append(NL);

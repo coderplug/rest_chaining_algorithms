@@ -8,6 +8,8 @@ import main.data.Trace;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.util.ArrayList;
+import java.util.List;
 
 @Path("/rest")
 public class Resources {
@@ -30,17 +32,25 @@ public class Resources {
 
     // The Java method will process HTTP GET requests
     @GET
-    @Path("/get/{chaining}")
+    @Path("/get/{chaining}/{goal}/{fact}")
     // The Java method will produce content in XML media type
     @Produces({MediaType.APPLICATION_XML})
-    public AbstractChaining getChainingExample(@PathParam("chaining") String chainingType) {
+    public AbstractChaining getChainingExample(@PathParam("chaining") String chainingType,
+                                               @PathParam("goal") String goal,
+                                               @PathParam("fact") String fact) {
         if(!chainingType.equals("forward") && !chainingType.equals("backward")){
             return new BackwardChaining();
         }
-        IOReader io = new IOReader();
-        AbstractChaining chainingAlgorithm = io.readFromFile(chainingType);
+        List facts = new ArrayList<>();
+        facts.add(fact);
+        Data data = new Data(goal, facts, chainingType);
+        AbstractChaining chainingAlgorithm = createChaining(data);
         chainingAlgorithm.execute();
-        io.writeToFile(chainingAlgorithm.toString());
+
+        //IOReader io = new IOReader();
+        //AbstractChaining chainingAlgorithm = io.readFromFile(chainingType);
+        //chainingAlgorithm.execute();
+        //io.writeToFile(chainingAlgorithm.toString());
         return chainingAlgorithm;
     }
 
@@ -54,11 +64,11 @@ public class Resources {
         if (data == null || data.getChainingType() == null || data.getChainingType().isEmpty()){
             return new Trace();
         }
-        IOReader reader = new IOReader();
-        data.setRules(reader.rulesFromFile());
-        AbstractChaining chainingAlgorithm = createChaining(data);
-        chainingAlgorithm.execute();
-        return chainingAlgorithm.getTrace();
+        //IOReader reader = new IOReader();
+        //data.setRules(reader.rulesFromFile());
+        //AbstractChaining chainingAlgorithm = createChaining(data);
+        //chainingAlgorithm.execute();
+        return null;//chainingAlgorithm.getTrace();
     }
 
     // The Java method will process HTTP POST requests
@@ -71,10 +81,11 @@ public class Resources {
         if (data == null || data.getChainingType() == null || data.getChainingType().isEmpty()){
             return new BackwardChaining();
         }
-        IOReader reader = new IOReader();
-        data.setRules(reader.rulesFromFile());
-        AbstractChaining chainingAlgorithm = createChaining(data);
-        chainingAlgorithm.execute();
-        return chainingAlgorithm;
-        }
+        //IOReader reader = new IOReader();
+        //data.setRules(reader.rulesFromFile());
+        //AbstractChaining chainingAlgorithm = createChaining(data);
+        //chainingAlgorithm.execute();
+        //return chainingAlgorithm;
+        return null;
+    }
 }

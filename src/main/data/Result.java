@@ -1,5 +1,7 @@
 package main.data;
 
+import main.data.entity.Rule;
+
 import javax.xml.bind.annotation.*;
 import java.util.LinkedList;
 import java.util.List;
@@ -58,7 +60,7 @@ public class Result {
         StringBuilder stringBuilder = new StringBuilder();
         String delim = "";
         for (Rule rule : ruleSequence) {
-            stringBuilder.append(delim).append("R" + rule.getNumber());
+            stringBuilder.append(delim).append("R" + rule.getId());
             delim = ", ";
         }
         if(ruleSequence.size() == 0 ){

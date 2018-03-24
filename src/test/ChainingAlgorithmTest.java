@@ -1,16 +1,18 @@
 package test;
 
-import main.chaining.AbstractChaining;
-import main.chaining.ForwardChaining;
-import main.data.Data;
-import main.data.Rule;
+import main.data.entity.Antecedent;
+import main.data.entity.Rule;
+import main.data.entity.RuleAntecedent;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 public class ChainingAlgorithmTest {
-    @Test
+    /*@Test
     public void testForwardChaining() throws Exception {
         List<Rule> rules;
         List<String> antecedents;
@@ -50,5 +52,42 @@ public class ChainingAlgorithmTest {
 
         AbstractChaining chainingAlgorithm = new ForwardChaining(new Data("A", rules, facts, "forward"));
         chainingAlgorithm.execute();
+    }*/
+
+    @Test
+    public void sortingTest(){
+        List<Antecedent> antecedents = new LinkedList<>();
+        antecedents.add(null);
+        antecedents.add(null);
+        antecedents.add(null);
+
+        List<RuleAntecedent> list = new ArrayList<>();
+        Rule rule = new Rule();
+        Antecedent antecedent = new Antecedent();
+
+        antecedent.setName("B");
+        RuleAntecedent ruleAntecedent = new RuleAntecedent(rule, antecedent);
+        ruleAntecedent.setPosition(3L);
+        list.add(ruleAntecedent);
+        antecedents.set(2, antecedent);
+
+        antecedent = new Antecedent();
+        antecedent.setName("C");
+        ruleAntecedent = new RuleAntecedent(rule, antecedent);
+        ruleAntecedent.setPosition(1L);
+        list.add(ruleAntecedent);
+        antecedents.set(0, antecedent);
+
+        antecedent = new Antecedent();
+        antecedent.setName("X");
+        ruleAntecedent = new RuleAntecedent(rule, antecedent);
+        ruleAntecedent.setPosition(2L);
+        list.add(ruleAntecedent);
+        antecedents.set(1, antecedent);
+
+        rule.setRuleAntecedents(list);
+        rule.orderAntecedents();
+
+        assertEquals(antecedents, rule.getAntecedents());
     }
 }

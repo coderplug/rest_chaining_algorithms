@@ -2,7 +2,8 @@ package main.chaining;
 
 import main.data.Data;
 import main.data.Result;
-import main.data.Rule;
+import main.data.entity.Antecedent;
+import main.data.entity.Rule;
 import main.data.Trace;
 
 import javax.xml.bind.annotation.XmlRootElement;
@@ -12,19 +13,12 @@ import java.util.List;
 @XmlRootElement(name = "chainingQuery")
 public class ForwardChaining extends AbstractChaining {
 
-    String step;
-    private int lineCount;
-    private List<String> facts;
-
     public ForwardChaining(){
         super();
-        lineCount = 0;
     }
 
     public ForwardChaining(Data data) {
         super(data);
-        lineCount = 0;
-        facts = new LinkedList<>(data.getFacts());
     }
 
     public void execute() {
@@ -35,6 +29,7 @@ public class ForwardChaining extends AbstractChaining {
         Data data = getData();
         String goal = data.getGoal();
         List<Rule> rules = data.getRules();
+        List<String> facts = getFacts();
         if (facts.contains(goal)) {
             setResult(new Result(true, ruleList, data));
             return;
@@ -69,9 +64,9 @@ public class ForwardChaining extends AbstractChaining {
                         }
                     } else {
                         stringBuilder.append(" not applied, because of lacking ");
-                        for(String antecedent: rule.getAntecedents()){
-                            if (!getFacts().contains(antecedent)) {
-                                stringBuilder.append(antecedent);
+                        for(Antecedent antecedent: rule.getAntecedents()){
+                            if (!getFacts().contains(antecedent.getName())) {
+                                stringBuilder.append(antecedent.getName());
                                 break;
                             }
                         }

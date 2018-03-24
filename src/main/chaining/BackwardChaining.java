@@ -2,7 +2,8 @@ package main.chaining;
 
 import main.data.Data;
 import main.data.Result;
-import main.data.Rule;
+import main.data.entity.Antecedent;
+import main.data.entity.Rule;
 import main.data.Trace;
 
 import javax.xml.bind.annotation.XmlRootElement;
@@ -56,17 +57,17 @@ public class BackwardChaining extends AbstractChaining {
         for (Rule rule : rules) {
             //Checks if rule is not used and currentGoal is rules result
             if (!rule.getFlag1() && rule.getConsequent().equals(currentGoal)) {
-                List<String> antecedents = rule.getAntecedents();
+                List<Antecedent> antecedents = rule.getAntecedents();
                 boolean antecendentsExists = true;
                 //Information about current goal, used rule and new goals
                 trace.addToTrace(getRecursionLevel() + "Goal " + currentGoal + "."
                         + " Take " + rule.toString() + "."
                         + " New goals " + rule.listAntecedents() + ".");
                 //Iterating through antecendants to check whether they exist
-                for (String antecedent : antecedents) {
+                for (Antecedent antecedent : antecedents) {
                     //Checks whether goal finding fails
-                    if (!goals.contains(antecedent)){
-                        if (!backwardChaining(antecedent)) {
+                    if (!goals.contains(antecedent.getName())){
+                        if (!backwardChaining(antecedent.getName())) {
                             antecendentsExists = false;
                             break;
                         }
