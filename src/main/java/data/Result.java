@@ -1,6 +1,6 @@
-package main.data;
+package data;
 
-import main.data.entity.Rule;
+import data.entity.Rule;
 
 import javax.xml.bind.annotation.*;
 import java.util.LinkedList;
@@ -26,7 +26,7 @@ public class Result {
         this.goalReached = goalReached;
         this.ruleSequence = ruleSequence;
         this.data = data;
-    };
+    }
 
     @Override
     public String toString() {

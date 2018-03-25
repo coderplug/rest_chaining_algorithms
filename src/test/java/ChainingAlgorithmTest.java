@@ -1,15 +1,10 @@
-package test;
-
-import main.data.entity.Antecedent;
-import main.data.entity.Rule;
-import main.data.entity.RuleAntecedent;
-import org.junit.jupiter.api.Test;
-
+import data.entity.Antecedent;
+import data.entity.Rule;
+import data.entity.RuleAntecedent;
+import org.junit.Test;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ChainingAlgorithmTest {
     /*@Test
@@ -54,7 +49,7 @@ public class ChainingAlgorithmTest {
         chainingAlgorithm.execute();
     }*/
 
-    @Test
+    /*@Test
     public void sortingTest(){
         List<Antecedent> antecedents = new LinkedList<>();
         antecedents.add(null);
@@ -89,5 +84,5 @@ public class ChainingAlgorithmTest {
         rule.orderAntecedents();
 
         assertEquals(antecedents, rule.getAntecedents());
-    }
+    }*/
 }

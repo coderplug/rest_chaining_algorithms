@@ -1,4 +1,4 @@
-package main.data.entity;
+package data.entity;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlAccessType;

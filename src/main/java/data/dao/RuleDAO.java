@@ -1,8 +1,8 @@
-package main.data.dao;
+package data.dao;
 
-import main.data.entity.Rule;
+import data.entity.Rule;
 
-import javax.enterprise.context.ApplicationScoped;
+import javax.faces.bean.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import java.util.List;

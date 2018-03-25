@@ -1,4 +1,4 @@
-package main.data.entity;
+package data.entity;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -20,13 +20,6 @@ public class RuleAntecedent {
 
     @Column(name = "antecedent_position")
     private Long position;
-
-    public RuleAntecedent() {}
-
-    public RuleAntecedent(Rule rule, Antecedent antecedent) {
-        this.assocRule = rule;
-        this.assocAntecedent = antecedent;
-    }
 
     //Getters and setters omitted for brevity
 

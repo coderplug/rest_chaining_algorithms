@@ -1,4 +1,4 @@
-package main.data.entity;
+package data.entity;
 
 
 import java.io.Serializable;
@@ -10,17 +10,6 @@ public class RuleAntecedentId
     private Long assocRule;
 
     private Long assocAntecedent;
-
-    public RuleAntecedentId(){
-
-    }
-
-    public RuleAntecedentId(
-            Long rule,
-            Long antecedent) {
-        this.assocRule = rule;
-        this.assocAntecedent = antecedent;
-    }
 
     //Getters omitted for brevity
 

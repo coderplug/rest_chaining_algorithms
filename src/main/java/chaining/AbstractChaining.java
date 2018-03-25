@@ -1,9 +1,9 @@
-package main.chaining;
+package chaining;
 
 
-import main.data.Data;
-import main.data.Result;
-import main.data.Trace;
+import data.Data;
+import data.Result;
+import data.Trace;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -24,14 +24,15 @@ public abstract class AbstractChaining {
     private Result result;
 
     public AbstractChaining(){
-        this.trace = new Trace(new LinkedList<>());
+        this.trace = new Trace(new LinkedList<String>());
     }
 
     public AbstractChaining(Data data) {
         this.data = data;
-        this.trace = new Trace(new LinkedList<>());
+        this.trace = new Trace(new LinkedList<String>());
         facts = new LinkedList<>(data.getFacts());
     }
+
 
     public Data getData() {
         return data;

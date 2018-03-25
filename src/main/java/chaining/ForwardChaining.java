@@ -1,10 +1,10 @@
-package main.chaining;
+package chaining;
 
-import main.data.Data;
-import main.data.Result;
-import main.data.entity.Antecedent;
-import main.data.entity.Rule;
-import main.data.Trace;
+import data.Data;
+import data.Result;
+import data.Trace;
+import data.entity.Antecedent;
+import data.entity.Rule;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.LinkedList;
@@ -41,17 +41,36 @@ public class ForwardChaining extends AbstractChaining {
             for (Rule rule : rules) {
                 StringBuilder stringBuilder = new StringBuilder();
                 stringBuilder.append("    " + rule.toString());
+
+                /*
+                Checks if flag1 or flag2 is up
+                flag1 - used rule
+                flag2 - not applied because result is already in the facts
+                 */
                 if (!rule.getFlag1() && !rule.getFlag2()) {
-                    //Checks if facts already contains current rule antecedents (rule conditions)
-                    if (facts.containsAll(rule.getAntecedents())) {
-                        //Checks if facts doesn't contain consequent (rule result)
+                    /*
+                    Checks if facts contains rule antecedents (rule conditions)
+                     */
+                    List<String> antecedents = new LinkedList<>();
+                    for (Antecedent antecedent: rule.getAntecedents())
+                    {
+                        antecedents.add(antecedent.getName());
+                    }
+                    if (facts.containsAll(antecedents)) {
+                        /*
+                        Checks if facts doesn't contain consequent (rule result)
+                         */
                         if (!facts.contains(rule.getConsequent())) {
+                            //Marked as used
                             rule.setFlag1(true);
                             ruleList.add(rule);
+                            //Result added to facts
                             facts.add(rule.getConsequent());
+
                             trace.addToTrace(stringBuilder.toString() + " apply. Raise flag1. Facts "
                                     + listFacts() + ".");
                             facts_changed = true;
+                            //Checks if last rules result is goal
                             if (rule.getConsequent().equals(goal)) {
                                 trace.addToTrace("    Goal achieved." + NL);
                                 setResult(new Result(true, ruleList, data));
@@ -84,6 +103,5 @@ public class ForwardChaining extends AbstractChaining {
             trace.addToTrace("");
         } while (facts_changed);
         setResult(new Result(false, ruleList, data));
-        return;
     }
 }

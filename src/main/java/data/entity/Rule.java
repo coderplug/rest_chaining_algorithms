@@ -1,4 +1,4 @@
-package main.data.entity;
+package data.entity;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.*;
@@ -23,6 +23,7 @@ public class Rule {
     private String consequent;
 
     @OneToMany(mappedBy = "assocRule", orphanRemoval=true)
+    @XmlTransient
     private List<RuleAntecedent> ruleAntecedents;
 
     @XmlElementWrapper(name = "antecedents")
@@ -35,9 +36,11 @@ public class Rule {
     @Column(name = "id")
     private Long id;
 
+    @XmlTransient
     @Transient
     private Boolean flag1;
 
+    @XmlTransient
     @Transient
     private Boolean flag2;
 
@@ -73,6 +76,7 @@ public class Rule {
     }
 
     public List<Antecedent> getAntecedents() {
+        orderAntecedents();
         return antecedents;
     }
 
@@ -104,6 +108,7 @@ public class Rule {
         this.flag2 = flag2;
     }
 
+
     public void orderAntecedents(){
         antecedents = new LinkedList<>();
         if (ruleAntecedents != null)
@@ -134,6 +139,7 @@ public class Rule {
         StringBuilder sb = new StringBuilder();
         String anc;
         sb.append("R").append(Long.toString(id)).append(": ");
+        orderAntecedents();
         for(Antecedent antecedent : antecedents) {
             anc = antecedent.getName();
             sb.append(anc).append(", ");
@@ -146,6 +152,7 @@ public class Rule {
     //Used for listing risk conditions in result string
     public String listAntecedents() {
         StringBuilder result = new StringBuilder();
+        orderAntecedents();
         for(int i=0; i<antecedents.size(); i++)
         {
             if (i != antecedents.size() - 1)

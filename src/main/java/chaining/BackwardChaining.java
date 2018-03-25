@@ -1,12 +1,13 @@
-package main.chaining;
+package chaining;
 
-import main.data.Data;
-import main.data.Result;
-import main.data.entity.Antecedent;
-import main.data.entity.Rule;
-import main.data.Trace;
+import data.Data;
+import data.Result;
+import data.Trace;
+import data.entity.Antecedent;
+import data.entity.Rule;
 
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -106,7 +107,8 @@ public class BackwardChaining extends AbstractChaining {
         return false;
     }
 
-    public String getRecursionLevel() {
+    @XmlTransient
+    private String getRecursionLevel() {
         StringBuilder level = new StringBuilder();
         String lineNumber = Integer.toString(++lineCount);
 

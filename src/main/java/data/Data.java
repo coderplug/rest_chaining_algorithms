@@ -1,10 +1,9 @@
-package main.data;
+package data;
 
-import main.data.dao.RuleDAO;
-import main.data.entity.Rule;
+import data.controller.RuleController;
+import data.entity.Rule;
 
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.RequestScoped;
+import javax.faces.bean.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.xml.bind.annotation.*;
@@ -23,16 +22,13 @@ public class Data {
 
     @XmlTransient
     @Inject
-    private RuleDAO ruleDAO;
-    //@XmlElementWrapper(name = "rules")
-    //@XmlElement(name = "rule")
-    @XmlTransient
-    private List<Rule> rules;
+    private RuleController ruleController;
 
     @XmlElementWrapper(name = "facts")
     @XmlElement(name = "fact")
     private List<String> facts;
 
+    //@Inject
     public Data(){
         //rules = ruleDAO.getAll();
         facts = new LinkedList<>();
@@ -44,18 +40,8 @@ public class Data {
         this.chainingType = chainingType;
     }
 
-    @PostConstruct
-    private void postConstruct(){
-        rules = ruleDAO.getAll();
-    }
-
-    @XmlTransient
     public List<Rule> getRules() {
-        return rules;
-    }
-
-    public void setRules(List<Rule> rules) {
-        this.rules = rules;
+        return ruleController.getRulesList();
     }
 
     public List<String> getFacts() {
@@ -87,7 +73,7 @@ public class Data {
     {
         String NL = System.getProperty("line.separator");
         StringBuilder stringBuilder = new StringBuilder();
-        List<Rule> rules = ruleDAO.getAll();
+        List<Rule> rules = ruleController.getRulesList();//ruleDAO.getAll();
         stringBuilder.append("  1) Rules").append(NL);
         for(Rule r: rules){
             stringBuilder.append("     ").append(r.toString()).append(NL);

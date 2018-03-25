@@ -1,4 +1,4 @@
-package main.data;
+package data;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.RequestScoped;
@@ -22,7 +22,7 @@ public class JPAResources implements Serializable
     @RequestScoped
     private EntityManager createJTAEntityManager()
     {
-        return factory.createEntityManager();
+        return factory.createEntityManager(SynchronizationType.SYNCHRONIZED);
     }
 
     private void closeUnsynchronizedEntityManager(@Disposes @Default EntityManager em)
