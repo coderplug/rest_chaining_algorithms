@@ -6,10 +6,12 @@
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
           <element id="module-output" name="rest_chaining_algorithms" />
+          <element id="jpa-descriptors" facet="rest_chaining_algorithms/jpa/JPA" />
         </element>
         <element id="directory" name="lib">
-          <element id="library" level="project" name="Jersey-2.2" />
-          <element id="library" level="module" name="JUnit5.0" module-name="rest_chaining_algorithms" />
+          <element id="library" level="project" name="Maven: javax.inject:javax.inject:1" />
+          <element id="library" level="project" name="Maven: org.primefaces:primefaces:6.0" />
+          <element id="library" level="project" name="Maven: postgresql:postgresql:9.1-901-1.jdbc4" />
         </element>
       </element>
     </root>
