@@ -16,10 +16,6 @@ public class RuleDAO {
         manager.persist(rule);
     }
 
-    public void deleteById(Long id){
-        manager.createNamedQuery("Rule.deleteById").setParameter("id", id).executeUpdate();
-    }
-
     public List<Rule> getAll(){
         List<Rule> rules = manager.createNamedQuery("Rule.findAll", Rule.class).getResultList();
         return rules;

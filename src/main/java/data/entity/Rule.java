@@ -13,10 +13,10 @@ import java.util.Objects;
         @NamedQuery(name = "Rule.findAll", query = "SELECT r FROM Rule r ORDER BY r.id ASC "),
         @NamedQuery(name = "Rule.findById", query = "SELECT r FROM Rule r WHERE r.id = :id ORDER BY r.id ASC "),
         @NamedQuery(name = "Rule.findByConsequent", query = "SELECT r FROM Rule r WHERE r.consequent = :consequent ORDER BY r.id ASC "),
-        @NamedQuery(name = "Rule.deleteById", query = "DELETE FROM Rule r WHERE r.id = :id")
+        @NamedQuery(name = "Rule.findByServer", query = "SELECT r FROM Rule r WHERE r.server = :server ORDER BY r.id ASC")
 })
 @Entity
-@Table(name = "rule", schema = "public", catalog = "chainingDB")
+@Table(name = "dbs_rule", schema = "public", catalog = "chainingDB")
 public class Rule {
 
     @Column(name = "consequent")
@@ -35,6 +35,9 @@ public class Rule {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
+
+    @Column(name = "server")
+    private String server;
 
     @XmlTransient
     @Transient
@@ -57,6 +60,14 @@ public class Rule {
         this.id = number;
         flag1 = false;
         flag2 = false;
+    }
+
+    public String getServer() {
+        return server;
+    }
+
+    public void setServer(String server) {
+        this.server = server;
     }
 
     public List<RuleAntecedent> getRuleAntecedents() {
@@ -120,6 +131,11 @@ public class Rule {
                 if (newList.size() > 0) {
                     RuleAntecedent minPos = newList.get(0);
                     for (RuleAntecedent obj : newList) {
+                        if (!obj.getServer().equals(server))
+                        {
+                            removedList.add(obj);
+                            continue;
+                        }
                         if (obj.getPosition() < minPos.getPosition()) {
                             minPos = obj;
                         }
@@ -146,6 +162,7 @@ public class Rule {
         }
         sb.delete(sb.lastIndexOf(", "), sb.length());
         sb.append(" -> ").append(consequent);
+        sb.append(" from ").append(server);
         return sb.toString();
     }
 

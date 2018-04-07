@@ -74,7 +74,7 @@ public class BackwardChaining extends AbstractChaining {
                         }
                     } else {
                         recursionLevel++;
-                        trace.addToTrace(getRecursionLevel() + "Goal " + antecedent + ". Loop.");
+                        trace.addToTrace(getRecursionLevel() + "Goal " + antecedent.getName() + ". Loop.");
                         recursionLevel--;
                         antecendentsExists = false;
                         break;

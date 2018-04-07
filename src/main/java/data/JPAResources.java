@@ -22,7 +22,7 @@ public class JPAResources implements Serializable
     @RequestScoped
     private EntityManager createJTAEntityManager()
     {
-        return factory.createEntityManager(SynchronizationType.SYNCHRONIZED);
+        return factory.createEntityManager();
     }
 
     private void closeUnsynchronizedEntityManager(@Disposes @Default EntityManager em)

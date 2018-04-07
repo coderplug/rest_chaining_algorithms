@@ -9,7 +9,7 @@ import java.util.Objects;
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD) //Needed to show List values correctly
 @Entity
-@Table(name = "antecedent", schema = "public", catalog = "chainingDB")
+@Table(name = "dbs_antecedent", schema = "public", catalog = "chainingDB")
 public class Antecedent {
 
     @Id
@@ -19,6 +19,17 @@ public class Antecedent {
 
     @Column(name = "name")
     private String name;
+
+    @Column(name = "server")
+    private String server;
+
+    public String getServer() {
+        return server;
+    }
+
+    public void setServer(String server) {
+        this.server = server;
+    }
 
     public Long getId() {
         return id;

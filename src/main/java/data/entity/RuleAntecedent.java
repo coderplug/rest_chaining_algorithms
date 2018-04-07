@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "rule_antecedent")
+@Table(name = "dbs_rule_antecedent")
 @IdClass(RuleAntecedentId.class)
 public class RuleAntecedent {
 
@@ -21,6 +21,8 @@ public class RuleAntecedent {
     @Column(name = "antecedent_position")
     private Long position;
 
+    @Column(name = "server")
+    private String server;
     //Getters and setters omitted for brevity
 
     @Override
@@ -38,6 +40,14 @@ public class RuleAntecedent {
     @Override
     public int hashCode() {
         return Objects.hash(assocRule, assocAntecedent);
+    }
+
+    public String getServer() {
+        return server;
+    }
+
+    public void setServer(String server) {
+        this.server = server;
     }
 
     public Rule getAssocRule() {
