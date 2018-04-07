@@ -1,0 +1,3 @@
+CREATE OR REPLACE VIEW dbs_rule (id, consequent, server) AS (SELECT r.id, r.consequent, 'local' from rule r); 
+CREATE OR REPLACE VIEW dbs_rule_antecedent (rule_id, antecedent_id, antecedent_position, server) AS (SELECT ra.rule_id, ra.antecedent_id, ra.antecedent_position, 'local' from rule_antecedent ra);
+CREATE OR REPLACE VIEW dbs_antecedent (id, name, server) AS (SELECT a.id, a.name, 'local' from antecedent a);
