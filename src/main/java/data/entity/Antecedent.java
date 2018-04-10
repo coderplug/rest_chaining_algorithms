@@ -4,13 +4,15 @@ import javax.persistence.*;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.io.Serializable;
 import java.util.Objects;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD) //Needed to show List values correctly
 @Entity
+@IdClass(AntecedentId.class)
 @Table(name = "dbs_antecedent", schema = "public", catalog = "chainingDB")
-public class Antecedent {
+public class Antecedent implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,6 +22,7 @@ public class Antecedent {
     @Column(name = "name")
     private String name;
 
+    @Id
     @Column(name = "server")
     private String server;
 
@@ -52,12 +55,13 @@ public class Antecedent {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Antecedent that = (Antecedent) o;
-        return id == that.id &&
-                Objects.equals(name, that.name);
+        return Objects.equals(id, that.id) &&
+                Objects.equals(server, that.server);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name);
+
+        return Objects.hash(id, server);
     }
 }

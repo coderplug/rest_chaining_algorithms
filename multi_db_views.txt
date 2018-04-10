@@ -1,3 +1,26 @@
-CREATE OR REPLACE VIEW dbs_rule (id, consequent, server) AS (SELECT r.id, r.consequent, 'local' from rule r); 
-CREATE OR REPLACE VIEW dbs_rule_antecedent (rule_id, antecedent_id, antecedent_position, server) AS (SELECT ra.rule_id, ra.antecedent_id, ra.antecedent_position, 'local' from rule_antecedent ra);
-CREATE OR REPLACE VIEW dbs_antecedent (id, name, server) AS (SELECT a.id, a.name, 'local' from antecedent a);
+CREATE OR REPLACE VIEW dbs_rule (id, consequent, server) AS 
+	(SELECT r.*, 'local'
+	FROM rule r
+	UNION ALL
+	SELECT remote1.*, 'remote1'
+	FROM dblink('dbname=chainingDB port=5432 host=91.211.247.30 user=postgres password=12345',
+		'SELECT * FROM rule') AS 
+		remote1(id int, consequent varchar(10))); 
+		
+CREATE OR REPLACE VIEW dbs_rule_antecedent (rule_id, antecedent_id, antecedent_position, server) AS 
+	(SELECT ra.*, 'local' 
+	FROM rule_antecedent ra 
+	UNION ALL
+	SELECT remote1.*, 'remote1'
+	FROM dblink('dbname=chainingDB port=5432 host=91.211.247.30 user=postgres password=12345',
+		'SELECT * FROM rule_antecedent') AS 
+		remote1(rule_id int, antecedent_id int, antecedent_position int));
+		
+CREATE OR REPLACE VIEW dbs_antecedent (id, name, server) AS 
+	(SELECT a.id, a.name, 'local' 
+	FROM antecedent a
+	UNION ALL
+	SELECT remote1.*, 'remote1'
+	FROM dblink('dbname=chainingDB port=5432 host=91.211.247.30 user=postgres password=12345',
+		'SELECT * FROM antecedent') AS 
+		remote1(id int, name varchar(10)));

@@ -2,6 +2,7 @@ package data.entity;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -10,19 +11,20 @@ import java.util.Objects;
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD) //Needed to show List values correctly
 @NamedQueries({
-        @NamedQuery(name = "Rule.findAll", query = "SELECT r FROM Rule r ORDER BY r.id ASC "),
-        @NamedQuery(name = "Rule.findById", query = "SELECT r FROM Rule r WHERE r.id = :id ORDER BY r.id ASC "),
-        @NamedQuery(name = "Rule.findByConsequent", query = "SELECT r FROM Rule r WHERE r.consequent = :consequent ORDER BY r.id ASC "),
-        @NamedQuery(name = "Rule.findByServer", query = "SELECT r FROM Rule r WHERE r.server = :server ORDER BY r.id ASC")
+        @NamedQuery(name = "Rule.findAll", query = "SELECT r FROM Rule r ORDER BY r.server, r.id ASC "),
+        @NamedQuery(name = "Rule.findById", query = "SELECT r FROM Rule r WHERE r.id = :id ORDER BY r.server, r.id ASC "),
+        @NamedQuery(name = "Rule.findByConsequent", query = "SELECT r FROM Rule r WHERE r.consequent = :consequent ORDER BY r.server, r.id ASC "),
+        @NamedQuery(name = "Rule.findByServer", query = "SELECT r FROM Rule r WHERE r.server = :server ORDER BY r.server, r.id ASC")
 })
 @Entity
+@IdClass(RuleId.class)
 @Table(name = "dbs_rule", schema = "public", catalog = "chainingDB")
-public class Rule {
+public class Rule implements Serializable {
 
     @Column(name = "consequent")
     private String consequent;
 
-    @OneToMany(mappedBy = "assocRule", orphanRemoval=true)
+    @OneToMany(mappedBy = "assocRule")
     @XmlTransient
     private List<RuleAntecedent> ruleAntecedents;
 
@@ -36,6 +38,7 @@ public class Rule {
     @Column(name = "id")
     private Long id;
 
+    @Id
     @Column(name = "server")
     private String server;
 
@@ -122,20 +125,17 @@ public class Rule {
 
     public void orderAntecedents(){
         antecedents = new LinkedList<>();
+
         if (ruleAntecedents != null)
         {
             List<RuleAntecedent> removedList = new ArrayList<>();
+
             while(true) {
                 List<RuleAntecedent> newList = new ArrayList<>(ruleAntecedents);
                 newList.removeAll(removedList);
                 if (newList.size() > 0) {
                     RuleAntecedent minPos = newList.get(0);
                     for (RuleAntecedent obj : newList) {
-                        if (!obj.getServer().equals(server))
-                        {
-                            removedList.add(obj);
-                            continue;
-                        }
                         if (obj.getPosition() < minPos.getPosition()) {
                             minPos = obj;
                         }
@@ -184,17 +184,19 @@ public class Rule {
         return result.toString();
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Rule that = (Rule) o;
-        return id == that.id &&
-                Objects.equals(consequent, that.consequent);
+        Rule rule = (Rule) o;
+        return Objects.equals(id, rule.id) &&
+                Objects.equals(server, rule.server);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, consequent);
+
+        return Objects.hash(id, server);
     }
 }
