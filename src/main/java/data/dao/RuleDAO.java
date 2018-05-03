@@ -27,4 +27,8 @@ public class RuleDAO {
     public List<Rule> findByConsequent(String consequent){
         return manager.createNamedQuery("Rule.findByConsequent", Rule.class).setParameter("consequent", consequent).getResultList();
     }
+
+    public List<Rule> findByServer(String server){
+        return manager.createNamedQuery("Rule.findByServer", Rule.class).setParameter("server", server).getResultList();
+    }
 }

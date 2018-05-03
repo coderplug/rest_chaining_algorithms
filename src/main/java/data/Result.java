@@ -60,7 +60,7 @@ public class Result {
         StringBuilder stringBuilder = new StringBuilder();
         String delim = "";
         for (Rule rule : ruleSequence) {
-            stringBuilder.append(delim).append("R" + rule.getId());
+            stringBuilder.append(delim).append(rule.getServer()).append(".R" + rule.getId());
             delim = ", ";
         }
         if(ruleSequence.size() == 0 ){

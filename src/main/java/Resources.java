@@ -53,6 +53,12 @@ public class Resources {
         data.setChainingType(chainingType);
         data.setFacts(facts);
         data.setGoal(goal);
+        List<String> databases = new LinkedList<>();
+        databases.add("local1");
+        databases.add("local2");
+        databases.add("remote1");
+        databases.add("remote2");
+        data.setDatabases(databases);
         AbstractChaining chainingAlgorithm = createChaining(data);
         chainingAlgorithm.execute();
 
@@ -98,36 +104,11 @@ public class Resources {
         return chainingAlgorithm;
         //return null;
     }
-    @GET
-    @Path("/aaa")
-    @Produces({MediaType.TEXT_PLAIN})
-    public String getRules()
-    {
-        StringBuilder builder = new StringBuilder();
-        List<String> facts = new LinkedList<>();
-        facts.add("B");
-        for (Rule rule: data.getRules())
-        {
-            List<String> names = new ArrayList<>();
-            for (String fact: facts)
-            {
-                builder.append(fact);
-            }
-            builder.append(" vs ");
-            rule.orderAntecedents();
-            for (Antecedent antecedent: rule.getAntecedents())
-            {
-                names.add(antecedent.getName());
-                builder.append(antecedent.getName());
-            }
-            builder.append(" ").append(names.containsAll(facts)).append(NL);
-        }
-        return builder.toString();//data.toString();
-    }
 
     private void cloneDataObject(Data receivedData){
         data.setGoal(receivedData.getGoal());
         data.setFacts(receivedData.getFacts());
         data.setChainingType(receivedData.getChainingType());
+        data.setDatabases(receivedData.getDatabases());
     }
 }

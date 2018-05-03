@@ -17,6 +17,10 @@ import java.util.List;
 @RequestScoped
 public class Data {
 
+    @XmlElementWrapper(name = "databases") //List parent node
+    @XmlElement(name = "database") //List children node
+    private List<String> databases;
+
     private String chainingType;
     private String goal;
 
@@ -31,6 +35,7 @@ public class Data {
     //@Inject
     public Data(){
         //rules = ruleDAO.getAll();
+        databases = new LinkedList<>();
         facts = new LinkedList<>();
     }
 
@@ -40,8 +45,16 @@ public class Data {
         this.chainingType = chainingType;
     }
 
+    public List<String> getDatabases() {
+        return databases;
+    }
+
+    public void setDatabases(List<String> databases) {
+        this.databases = databases;
+    }
+
     public List<Rule> getRules() {
-        return ruleController.getRulesList();
+        return ruleController.getRulesList(databases);
     }
 
     public List<String> getFacts() {
@@ -73,7 +86,7 @@ public class Data {
     {
         String NL = System.getProperty("line.separator");
         StringBuilder stringBuilder = new StringBuilder();
-        List<Rule> rules = ruleController.getRulesList();//ruleDAO.getAll();
+        List<Rule> rules = getRules();//ruleDAO.getAll();
         stringBuilder.append("  1) Rules").append(NL);
         for(Rule r: rules){
             stringBuilder.append("     ").append(r.toString()).append(NL);

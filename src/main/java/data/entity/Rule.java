@@ -154,7 +154,7 @@ public class Rule implements Serializable {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         String anc;
-        sb.append("R").append(Long.toString(id)).append(": ");
+        sb.append(server).append(".R").append(Long.toString(id)).append(": ");
         orderAntecedents();
         for(Antecedent antecedent : antecedents) {
             anc = antecedent.getName();
@@ -162,7 +162,7 @@ public class Rule implements Serializable {
         }
         sb.delete(sb.lastIndexOf(", "), sb.length());
         sb.append(" -> ").append(consequent);
-        sb.append(" from ").append(server);
+        //sb.append(" from ").append(server);
         return sb.toString();
     }
 
