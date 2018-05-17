@@ -1,0 +1,5 @@
+DROP TRIGGER fill_antecedent_position ON rule_antecedent;
+DROP FUNCTION set_antecedent_position;
+DROP TABLE rule_antecedent;
+DROP TABLE rule;
+DROP TABLE antecedent;

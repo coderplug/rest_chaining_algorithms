@@ -1,0 +1,35 @@
+CREATE TABLE dbs_rule (id, consequent, server) AS 
+	(SELECT r.*, 'local'
+	FROM rule r
+	UNION ALL
+	SELECT remote1.*, 'remote1'
+	FROM dblink('dbname=chainingDB port=5432 host=91.211.247.30 user=postgres password=12345',
+		'SELECT * FROM rule') AS 
+		remote1(id int, consequent varchar(10)));
+		
+ALTER TABLE dbs_rule ADD PRIMARY KEY (id, server);
+
+CREATE TABLE dbs_antecedent (id, name, server) AS 
+	(SELECT a.id, a.name, 'local' 
+	FROM antecedent a
+	UNION ALL
+	SELECT remote1.*, 'remote1'
+	FROM dblink('dbname=chainingDB port=5432 host=91.211.247.30 user=postgres password=12345',
+		'SELECT * FROM antecedent') AS 
+		remote1(id int, name varchar(10)));
+		
+ALTER TABLE dbs_antecedent ADD PRIMARY KEY (id, server);
+
+CREATE TABLE dbs_rule_antecedent (rule_id, antecedent_id, antecedent_position, server) AS 
+	(SELECT ra.*, 'local' 
+	FROM rule_antecedent ra 
+	UNION ALL
+	SELECT remote1.*, 'remote1'
+	FROM dblink('dbname=chainingDB port=5432 host=91.211.247.30 user=postgres password=12345',
+		'SELECT * FROM rule_antecedent') AS 
+		remote1(rule_id int, antecedent_id int, antecedent_position int));
+		
+ALTER TABLE dbs_rule_antecedent
+	ADD PRIMARY KEY (rule_id, antecedent_id, server),
+	ADD FOREIGN KEY (rule_id, server) REFERENCES dbs_rule (id, server),
+	ADD FOREIGN KEY (antecedent_id, server) REFERENCES dbs_antecedent (id, server);

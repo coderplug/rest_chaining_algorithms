@@ -1,0 +1,39 @@
+CREATE TABLE IF NOT EXISTS rule (
+  id                serial PRIMARY KEY,
+  consequent        CHARACTER VARYING(10) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS antecedent (
+  id                serial PRIMARY KEY,
+  name              CHARACTER VARYING(10) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS rule_antecedent (
+	rule_id         INTEGER NOT NULL,
+	antecedent_id   INTEGER NOT NULL,
+	antecedent_position INTEGER NOT NULL,
+	PRIMARY KEY (rule_id, antecedent_id),
+	FOREIGN KEY (rule_id) REFERENCES rule (id),
+	FOREIGN KEY (antecedent_id) REFERENCES antecedent (id)
+);
+
+CREATE FUNCTION set_antecedent_position() RETURNS trigger AS $fill_antecedent_position$
+    BEGIN
+        -- Check that antecedent position is given
+        IF NEW.antecedent_position IS NULL
+            AND EXISTS (SELECT 1 FROM rule_antecedent ra WHERE ra.rule_id = NEW.rule_id) THEN
+            SELECT COALESCE(MAX(ra.antecedent_position), 0) + 1
+              INTO NEW.antecedent_position
+              FROM rule_antecedent ra
+             WHERE ra.rule_id = NEW.rule_id;
+        ELSE
+            NEW.antecedent_position := 1;
+        END IF;
+        RETURN NEW;
+    END;
+$fill_antecedent_position$ LANGUAGE plpgsql;
+
+
+CREATE TRIGGER fill_antecedent_position
+BEFORE INSERT ON rule_antecedent
+    FOR EACH ROW EXECUTE PROCEDURE set_antecedent_position();

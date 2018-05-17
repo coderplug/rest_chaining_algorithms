@@ -1,0 +1,3 @@
+DROP TABLE dbs_rule_antecedent;
+DROP TABLE dbs_antecedent;
+DROP TABLE dbs_rule;
