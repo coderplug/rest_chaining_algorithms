@@ -1,0 +1,17 @@
+CREATE TABLE dbs_rule (id, consequent, server) AS
+	(SELECT *, 'F5' from rule);
+
+ALTER TABLE dbs_rule ADD PRIMARY KEY (id, server);
+
+CREATE TABLE dbs_antecedent (id, name, server) AS
+	(SELECT *, 'F5' from antecedent);
+
+ALTER TABLE dbs_antecedent ADD PRIMARY KEY (id, server);
+
+CREATE TABLE dbs_rule_antecedent (rule_id, antecedent_id, antecedent_position, server) AS
+	(SELECT *, 'F5' from rule_antecedent);
+
+ALTER TABLE dbs_rule_antecedent
+	ADD PRIMARY KEY (rule_id, antecedent_id, server),
+	ADD FOREIGN KEY (rule_id, server) REFERENCES dbs_rule (id, server),
+	ADD FOREIGN KEY (antecedent_id, server) REFERENCES dbs_antecedent (id, server);

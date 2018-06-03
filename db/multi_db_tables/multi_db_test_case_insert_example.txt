@@ -1,0 +1,8 @@
+INSERT INTO dbs_rule (id, consequent, server) 
+(SELECT *, 'F5' from rule);
+
+INSERT INTO dbs_antecedent(id, name, server)
+(SELECT *, 'F5' from antecedent);
+
+INSERT INTO dbs_rule_antecedent (rule_id, antecedent_id, antecedent_position, server)
+(SELECT *, 'F5' from rule_antecedent);

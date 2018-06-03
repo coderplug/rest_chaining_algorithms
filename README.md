@@ -24,3 +24,31 @@ This is only server part of the web service, client source code can be reached[h
         * Set port: `8080` (should be default)
     5. Run the server, project should start successfully.
     
+### Database configuration for test cases (PostgreSQL without `dblink` extension)
+1. Create DB tables from `db/single_db/single_db_tables`
+2. Execute chosen test case from `db/single_db/Test Values`
+3. Create Multi DB tables from `db/multi_db_tables/multi_db_test_case_example.txt`
+    * Example uses `F5` value which identifies as "Forward 5th test case": 
+        * Letter represents chaining algorithm (`F` or `B`)
+        * Number represents test case number
+
+#### Note: Each test case represents a database, in order to add more than one, these steps must be taken:
+1. First test case use steps 1-3 from DB configuration section
+2. Delete values from `rule` and `rule_antecedent` tables (`antecedent` is optional as in all test cases remains unchanged).
+3. Execute chosen test case from `db/single_db/Test Values`
+4. Insert values into Multi DB tables from `db/multi_db_tables/multi_db_test_case_insert_example.txt` with `F5` 
+as an example test case (same as 3rd step)
+5. Repeat 2-4 if more test cases are needed
+
+### Database configuration for test cases (PostgreSQL with `dblink` extension)
+1. Create DB tables from `db/single_db/single_db_tables` on separate DB
+2. Execute chosen test case from `db/single_db/Test Values` or `db/single_db/values[2-4].txt` ([2-4] represents one of 4 files)
+3. Repeat for all databases
+4. Import dblink extension by executing `CREATE EXTENSION dblink;`
+4. Create Multi DB tables by changing and executing `db/multi_db_tables/multi_db_tables_4_tables.txt`
+    * Example uses 4 databases (2 local, 2 external), where dblink function parameters are: 
+        * dbname - DB name
+        * port - used port
+        * host - DB host IP
+        * user - DB username
+        * pass - DB password

@@ -1,3 +1,0 @@
-DROP VIEW dbs_rule_antecedent;
-DROP VIEW dbs_antecedent;
-DROP VIEW dbs_rule;
