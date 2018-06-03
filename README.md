@@ -52,3 +52,5 @@ as an example test case (same as 3rd step)
         * host - DB host IP
         * user - DB username
         * pass - DB password
+    * Server values are identified with names `local1`, `local2`, `remote1`, `remote2` which can be changed    
+    
