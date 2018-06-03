@@ -3,6 +3,7 @@ package data.entity;
 import java.io.Serializable;
 import java.util.Objects;
 
+//Taisyklės ID
 public class RuleId implements Serializable {
     private Long id;
     private String server;

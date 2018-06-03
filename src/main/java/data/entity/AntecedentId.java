@@ -2,7 +2,7 @@ package data.entity;
 
 import java.io.Serializable;
 import java.util.Objects;
-
+//Antecedento ID
 public class AntecedentId implements Serializable {
     private Long id;
     private String server;

@@ -5,17 +5,23 @@ import data.Data;
 import data.Result;
 import data.Trace;
 
+//JAXB importavimai
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+
 import java.util.LinkedList;
 import java.util.List;
+
 
 @XmlRootElement(name = "chainingQuery", namespace="")
 public abstract class AbstractChaining {
 
+    //Kuriant XML atvaizdavimą šis laukas nepridedamas į XML dokuementą
     @XmlTransient
+    //Laukas, nurodo naujos eilutės simbolį
     protected static String NL = System.getProperty("line.separator");
 
+    //Kuriant XML atvaizdavimą šis laukas nepridedamas į XML dokuementą
     @XmlTransient
     private List<String> facts;
 
@@ -69,7 +75,7 @@ public abstract class AbstractChaining {
 
     public abstract void execute();
 
-    //Used for listing facts in result string
+    //Faktų sąrašo atvaizdavimas String pavidalu
     public String listFacts() {
         StringBuilder result = new StringBuilder();
         for(int i=0; i<facts.size(); i++)

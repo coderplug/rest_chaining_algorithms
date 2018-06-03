@@ -1,11 +1,10 @@
 package data.entity;
 
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.Objects;
 
+//Sąryšio tarp taisyklių ir antecedentų ID
 public class RuleAntecedentId
         implements Serializable {
 
@@ -14,8 +13,6 @@ public class RuleAntecedentId
     private Long antecedentId;
 
     private String server;
-    //Getters omitted for brevity
-
 
     @Override
     public boolean equals(Object o) {

@@ -10,8 +10,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.util.LinkedList;
 import java.util.List;
 
-@XmlRootElement(name = "chainingQuery")
-public class ForwardChaining extends AbstractChaining {
+@XmlRootElement(name = "chainingQuery") //XML šakninis elementas šiam objektui
+public class ForwardChaining extends AbstractChaining { //Tiesioginio išvedimo algoritmo klasė
 
     public ForwardChaining(){
         super();
@@ -21,67 +21,69 @@ public class ForwardChaining extends AbstractChaining {
         super(data);
     }
 
-    public void execute() {
+    public void execute() { //1. Tiesioginio išvedimo algoritmo vykdymas
         List<Rule> ruleList = new LinkedList<>();
         int iterationNumber = 0;
-        boolean facts_changed;
+
+        boolean facts_changed; //Naudojamas patikrinti ar įvyko pakeitimų iteracijos metu
+
         Trace trace = getTrace();
         Data data = getData();
         String goal = data.getGoal();
         List<Rule> rules = data.getRules();
         List<String> facts = getFacts();
-        if (facts.contains(goal)) {
-            setResult(new Result(true, ruleList, data));
-            return;
+
+        if (facts.contains(goal)) { //2. Tikrinama ar pradiniuose faktuose yra tikslas
+            setResult(new Result(true, ruleList, data)); //3.
+            return; //4.
         }
-        if (rules.size() != 0) {
-            do {
+
+        if (rules.size() != 0) { //5. Patikrinam ar tuščias siekiant išvengti papildomų įrašų protokole
+            do { //6.
                 iterationNumber++;
                 trace.addToTrace("  ITERATION " + iterationNumber);
-                facts_changed = false;
-                for (Rule rule : rules) {
+
+                facts_changed = false; //7.
+
+                for (Rule rule : rules) { //8. Iteruojamos taisyklės
                     StringBuilder stringBuilder = new StringBuilder();
                     stringBuilder.append("    " + rule.toString());
 
-                /*
-                Checks if flag1 or flag2 is up
-                flag1 - used rule
-                flag2 - not applied because result is already in the facts
-                 */
+                    /* 9. Tikrina ar flag1 ir flag2 yra iškelti (angl. raised), kur:
+                    *   flag1 - panaudota taisyklė
+                    *   flag2 - nenaudojama, nes rezultatas jau yra kaupiamuose faktuose
+                    */
                     if (!rule.getFlag1() && !rule.getFlag2()) {
-                    /*
-                    Checks if facts contains rule antecedents (rule conditions)
-                     */
                         List<String> antecedents = new LinkedList<>();
                         for (Antecedent antecedent : rule.getAntecedents()) {
                             antecedents.add(antecedent.getName());
                         }
+                        //10. Patikrinama ar faktuose egzistuoja taisyklės antecedentai (sąlyginiai faktai)
                         if (facts.containsAll(antecedents)) {
-                        /*
-                        Checks if facts doesn't contain consequent (rule result)
-                         */
-                            if (!facts.contains(rule.getConsequent())) {
-                                //Marked as used
-                                rule.setFlag1(true);
-                                ruleList.add(rule);
-                                //Result added to facts
-                                facts.add(rule.getConsequent());
 
+                            //11. Tikrinama ar faktai neturi taisyklės rezultato (konsekvento)
+                            if (!facts.contains(rule.getConsequent())) {
+                                rule.setFlag1(true); //12. Naudojame taisyklę
+                                ruleList.add(rule); //13.
+                                facts.add(rule.getConsequent()); //14. Pridedamas rezultatas į faktus
                                 trace.addToTrace(stringBuilder.toString() + " apply. Raise flag1. Facts "
                                         + listFacts() + ".");
-                                facts_changed = true;
-                                //Checks if last rules result is goal
+                                facts_changed = true; //15.
+                                //16. Tikrinama ar taisyklės rezultatas yra tikslas
                                 if (rule.getConsequent().equals(goal)) {
                                     trace.addToTrace("    Goal achieved." + NL);
+                                    //17. Kelias iki tikslo rastas, sukuriamas ir priskiriamas rezultato objektas
                                     setResult(new Result(true, ruleList, data));
-                                    return;
+                                    return; //18.
                                 }
-                            } else {
+                            } else { //19.
+                                //20. Taisyklės rezultatas egzistuoja faktuose, praleidžiam taisyklę
                                 rule.setFlag2(true);
                                 trace.addToTrace(stringBuilder.toString() + " not applied, because RHS in facts. Raise flag2.");
                             }
                         } else {
                             stringBuilder.append(" not applied, because of lacking ");
+                            //Taisyklės vykdymui trūksta faktų, išvedame ko trūksta
                             for (Antecedent antecedent : rule.getAntecedents()) {
                                 if (!getFacts().contains(antecedent.getName())) {
                                     stringBuilder.append(antecedent.getName());
@@ -91,17 +93,20 @@ public class ForwardChaining extends AbstractChaining {
                             trace.addToTrace(stringBuilder.toString() + ".");
                         }
                     } else if (rule.getFlag2()) {
+                        //Pakeltas flag2, praleidžiam taisyklę
                         trace.addToTrace(stringBuilder.toString() + " skip, because flag2 raised.");
                     } else {
+                        //Pakeltas flag1, praleidžiam taisyklę
                         trace.addToTrace(stringBuilder.toString() + " skip, because flag1 raised.");
                     }
-                    if (facts_changed) {
-                        break;
+                    if (facts_changed) { //21.
+                        break; //22. Neįvyko pakeitimų, stabdomas algoritmas
                     }
                 }
                 trace.addToTrace("");
-            } while (facts_changed);
+            } while (facts_changed); //23.
         }
-        setResult(new Result(false, ruleList, data));
+        //Kelias nerastas, sukuriame rezultato objektą
+        setResult(new Result(false, ruleList, data)); //24.
     }
 }

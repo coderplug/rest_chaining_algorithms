@@ -11,30 +11,47 @@ import java.util.LinkedList;
 import java.util.List;
 
 
+//Naudojama surišti objektą su XML elementais
 @XmlRootElement
+//Nurodoma kaip kuriamas XML failas (pagal laukus), naudojama sąrašų elementams atvaizduoti
 @XmlAccessorType(XmlAccessType.FIELD)
+//CDI komponentas
 @Named
+//Objektas galioja tik kol vykdoma užklausa
 @RequestScoped
+//Klasė, aprašanti pradinius duomenis
 public class Data {
 
-    @XmlElementWrapper(name = "databases") //List parent node
-    @XmlElement(name = "database") //List children node
+    //Sąrašo tėvinis elementas
+    @XmlElementWrapper(name = "databases")
+    //Sąrašo vaikinis elementas
+    @XmlElement(name = "database")
+    //Duomenų bazių sąrašas
     private List<String> databases;
 
+    //Išvedimo tipo pavadinimas ("forward" arba "backward")
     private String chainingType;
+
+    //Užklausos tikslas
     private String goal;
 
+    //Neatvaizduojamas XML dokumente
     @XmlTransient
+    //Pasirūpinama, kad prireikus būtų sukurtas objektas
     @Inject
+    //Taisyklių valdiklis
     private RuleController ruleController;
+
+    @XmlElementWrapper(name = "rules")
+    @XmlElement(name = "rule")
+    private List<Rule> rules;
 
     @XmlElementWrapper(name = "facts")
     @XmlElement(name = "fact")
     private List<String> facts;
 
-    //@Inject
+    //XML generavimui reikalingas be parametrų konstruktorius
     public Data(){
-        //rules = ruleDAO.getAll();
         databases = new LinkedList<>();
         facts = new LinkedList<>();
     }
@@ -54,7 +71,8 @@ public class Data {
     }
 
     public List<Rule> getRules() {
-        return ruleController.getRulesList(databases);
+        rules = ruleController.getRulesList(databases);
+        return rules;
     }
 
     public List<String> getFacts() {
@@ -86,7 +104,7 @@ public class Data {
     {
         String NL = System.getProperty("line.separator");
         StringBuilder stringBuilder = new StringBuilder();
-        List<Rule> rules = getRules();//ruleDAO.getAll();
+        List<Rule> rules = getRules();
         stringBuilder.append("  1) Rules").append(NL);
         for(Rule r: rules){
             stringBuilder.append("     ").append(r.toString()).append(NL);
@@ -99,7 +117,7 @@ public class Data {
         return stringBuilder.toString();
     }
 
-    //Used for listing facts in result string
+    //Taisyklių atvaizdavimas tekstu
     public String listFacts() {
         StringBuilder result = new StringBuilder();
         for(int i=0; i<facts.size(); i++)

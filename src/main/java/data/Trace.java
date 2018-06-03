@@ -1,19 +1,26 @@
 package data;
 
+//JAXB anotacijų importavimas
 import javax.xml.bind.annotation.*;
+
 import java.util.LinkedList;
 import java.util.List;
 
+//Naudojama surišti objektą su XML elementais
 @XmlRootElement
+//Nurodoma kaip kuriamas XML failas (pagal laukus), naudojama sąrašų elementams atvaizduoti
 @XmlAccessorType(XmlAccessType.FIELD)
+//Registruojami algoritmų žingsniai
 public class Trace {
 
+    //Sąrašą aprašantis XML elementas
     @XmlElementWrapper(name = "trace_list")
+    //Sąrašo dalies XML elememntas
     @XmlElement(name = "line")
+    //Žinsnių sąrašas
     private List<String> traceList;
 
-    @XmlTransient
-    private List<String> strings;
+    //XML generavimui reikalingas be parametrų konstruktorius
     public Trace (){
         traceList = new LinkedList<>();
     }
@@ -28,7 +35,6 @@ public class Trace {
 
     public Trace(List<String> traceList) {
         this.traceList = traceList;
-        this.strings = new LinkedList<>();
     }
 
     public List<String> getTraceList() {

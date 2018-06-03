@@ -2,22 +2,35 @@ package data;
 
 import data.entity.Rule;
 
+//JAXB importavimas
 import javax.xml.bind.annotation.*;
+
 import java.util.LinkedList;
 import java.util.List;
 
+//Naudojama surišti objektą su XML elementais
 @XmlRootElement
-@XmlAccessorType(XmlAccessType.FIELD) //Needed to show List values correctly
+//Nurodoma kaip kuriamas XML failas (pagal laukus), naudojama sąrašų elementams atvaizduoti
+@XmlAccessorType(XmlAccessType.FIELD)
+//Algoritmo užklausos rezultatai
 public class Result {
+
+    //Nurodoma ar rastas kelias
     private Boolean goalReached;
 
+    //Sąrašą aprašantis XML elementas
     @XmlElementWrapper(name = "rule_sequence")
+    //Sąrašo dalies XML elementas
     @XmlElement(name = "rule")
+    //Taisyklių seka
     private List<Rule> ruleSequence;
 
-    @XmlTransient  //Used to avoid when creating xml file
+    //Ignoruojamas laukas, kuriant XML failą
+    @XmlTransient
+    //Algoritmo metu modifikuotas Data objektas
     private Data data;
 
+    //XML generavimui reikalingas be parametrų konstruktorius
     public Result(){
         ruleSequence = new LinkedList<>();
     }
@@ -56,6 +69,8 @@ public class Result {
     public List<Rule> getRuleSequence() {
         return ruleSequence;
     }
+
+    //Taisyklių sekos atvaizdavimas tekstu
     public String getRuleSequenceString(){
         StringBuilder stringBuilder = new StringBuilder();
         String delim = "";

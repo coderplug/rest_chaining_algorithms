@@ -7,23 +7,34 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.util.Objects;
 
+//Naudojama surišti objektą su XML elementais
 @XmlRootElement
-@XmlAccessorType(XmlAccessType.FIELD) //Needed to show List values correctly
+//Nurodoma kaip kuriamas XML failas (pagal laukus), naudojama sąrašų elementams atvaizduoti
+@XmlAccessorType(XmlAccessType.FIELD)
+//JPA esybė
 @Entity
+//Klasė, aprašanti sudėtinį ID
 @IdClass(AntecedentId.class)
+//Nurodoma duomenų bazė, lentelė ir schema
 @Table(name = "dbs_antecedent", schema = "public", catalog = "chainingDB")
+//Antecedento klasė
 public class Antecedent implements Serializable {
 
+    //ID
     @Id
+    //Aprašoma generavimo strategija
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //Duomenų bazėje atitinka šį pavadinimą
     @Column(name = "id")
     private Long id;
 
     @Column(name = "name")
+    //Antecedento pavadinimas
     private String name;
 
     @Id
     @Column(name = "server")
+    //Serveris, kuriam priklauso antecedentas
     private String server;
 
     public String getServer() {
@@ -61,7 +72,6 @@ public class Antecedent implements Serializable {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(id, server);
     }
 }
